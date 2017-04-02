@@ -83,7 +83,7 @@ for epoch in range(num_epochs):					# epochs through all songs
 			loss_this_epoch += model.train_on_batch(np.reshape(music_files[i, note],(1,1,5)), np.reshape(music_files[i, note+1], (1,1,5)))
 
 		model.reset_states()
-
+	print(loss_this_epoch)
 	loss_list.append(loss_this_epoch)
 
 	if(epoch % checkpoint_distance == 0):
@@ -100,14 +100,14 @@ for epoch in range(num_epochs):					# epochs through all songs
 		#convert to np array and round pitch, velocity, and channel to integer values, then clip them to the appropriate range
 		generated_song = np.array(generated_song)
 
-		print(generated_song.shape)
-		print(generated_song[:,0,0,:].shape)
-
+		
 		generated_song = generated_song[:,0,0,:] #manual reshaping
 		
 		generated_song[:, (1,3,4)] = np.round(generated_song[:,(1,3,4)])
 		generated_song[:, (1,3,4)] = np.clip(generated_song[:,(1,3,4)], 0, 127)
 		generated_song = np.nan_to_num(generated_song)
+
+		print(generated_song[:10])
 
 		new_midifile = MIDIFile.from_notes(generated_song)
 
